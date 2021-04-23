@@ -1,0 +1,10 @@
+{
+  "pos_forward_path": "/Users/yanwengong/Documents/JingZhang_lab/snp_effect/data/test_rsync_local_v2/input_fasta/pos_forward.fa",
+  "index": 1,
+  "model_name": "Chvon2",
+  "n_class": 8,
+  "model_path": "/Users/yanwengong/Documents/JingZhang_lab/snp_effect/data/galaxy_output/pbmc/0321_chvon2_ks16_clusterALL_universalNeg_10k/model.pt",
+  "target_category": [0,1,2,3,4,5,6,7],
+  "result_path": "/Users/yanwengong/Documents/JingZhang_lab/snp_effect/data/grad_cam/pbmc/Chvon2_peak1"
+}
+
