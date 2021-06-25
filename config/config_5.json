@@ -1,13 +1,13 @@
 {
   "pos_forward_path": "/Users/yanwengong/Documents/JingZhang_lab/snp_effect/data/test_rsync_local_v2/input_fasta/pos_forward.fa",
-  "index": 2,
+  "index": 5,
   "model_name": "DeepSea",
   "n_class": 8,
   "model_path": "/Users/yanwengong/Documents/JingZhang_lab/snp_effect/data/galaxy_output/pbmc/0415_DeepSea_negative10k/model.pt",
-  "target_category": [0],
+  "target_category": [1,2,3,5],
   "subset": "False",
   "plot": "True",
-  "result_path": "/Users/yanwengong/Documents/JingZhang_lab/snp_effect/data/grad_cam/pbmc/test_peak2"
+  "result_path": "/Users/yanwengong/Documents/JingZhang_lab/snp_effect/data/grad_cam/pbmc/test_peak5"
 }
 
 

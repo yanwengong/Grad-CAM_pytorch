@@ -1,0 +1,12 @@
+{
+  "pos_forward_path": "/home/yanweng/snp_effect/data/for_model_v2/input_fa/pos_forward.fa",
+  "index": "all",
+  "model_name": "DeepSea4",
+  "n_class": 8,
+  "model_path": "/home/yanweng/snp_effect/data/for_model_v2/output/0601_DeepSea4_negative0_pbmc/model.pt",
+  "target_category": [0,1,2,3,4,5,6,7],
+  "subset": "False",
+  "plot": "False",
+  "result_path": "/home/yanweng/snp_effect/data/grad_cam/pbmc/deepsea4/cam"
+}
+

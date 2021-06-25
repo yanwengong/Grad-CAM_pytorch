@@ -15,26 +15,28 @@ if __name__== '__main__':
         os.makedirs(config.result_path)
 
     # 2\ Load and process seq
-    data = Data(config.pos_forward_path, config.index)
+    # TODO: allow compute grad-cam for multiple input, save the cam in array
+    data = Data(config.pos_forward_path, config.index, config.subset)
     seq, complement_seq = data.get_seq()
-    seq_tensor = data.seq_one_hot_tensor(seq)
-    complement_seq_tensor = data.seq_one_hot_tensor(complement_seq)
+    data_tensor = data.seq_one_hot_tensor(seq)
+    complement_data_tensor = data.seq_one_hot_tensor(complement_seq)
 
     # 3\ run Grad-CAM
     for i in config.target_category:
         grad_cam = RunCam(config.model_name, config.n_class, config.model_path,
-                          i, seq_tensor)
+                          i, data_tensor)
         cam = grad_cam.compute_cam()
         #print(cam)
         target_name = "cluster_"+str(i)
         np.savetxt(os.path.join(config.result_path, target_name+"_forward_cam.csv"), cam, delimiter=",")
 
         grad_cam_complement = RunCam(config.model_name, config.n_class, config.model_path,
-                          i, complement_seq_tensor)
+                          i, complement_data_tensor)
         complement_cam = grad_cam_complement.compute_cam()
         #print(complement_cam)
         np.savetxt(os.path.join(config.result_path, target_name+"_complement_cam.csv"), complement_cam, delimiter=",")
 
         # 4\ plot the computed cam
-        Plot(cam, config.result_path, target_name+"_forward").plot_cam(1)
-        Plot(complement_cam, config.result_path, target_name+"_reverse_complement").plot_cam(2)
+        if config.plot == "True":
+            Plot(cam, config.result_path, target_name+"_forward").plot_cam(1)
+            Plot(complement_cam, config.result_path, target_name+"_reverse_complement").plot_cam(2)

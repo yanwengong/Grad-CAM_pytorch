@@ -5,13 +5,15 @@ import os
 
 class Plot:
     def __init__(self, cam, result_path, plot_name):
-        self.cam = cam
+        self.cam = cam[0]
         self.result_path = result_path
         self.plot_name = plot_name
 
     def plot_cam(self, i):
         x = np.linspace(0, 999, len(self.cam))
         y = self.cam
+        print(len(x))
+        print(len(y))
         spl = InterpolatedUnivariateSpline(x, y)
         plt.figure(i)
         plt.plot(x, y, 'ro', ms=5)

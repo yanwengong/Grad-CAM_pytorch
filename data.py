@@ -4,7 +4,7 @@ import pandas as pd
 
 class Data:
 
-    def __init__(self, fasta_path, index):
+    def __init__(self, fasta_path, index, subset):
         """
 
         :param fasta_path: path to the fasta file
@@ -12,37 +12,65 @@ class Data:
         """
         self.pos_fasta_path = fasta_path
         self.index = index
+        self.subset = subset
 
-    # return list of seq and reverse complement seq
+    # return array of forward seq and reverse complement seq
     def get_seq(self):
-        seq = pd.read_csv(self.pos_fasta_path, sep=">chr*",
-                                header=None, engine='python').values[1::2][:, 0][self.index]
+        if self.index == "all":
+            data = pd.read_csv(self.pos_fasta_path, sep=">chr*",
+                              header=None, engine='python').values[1::2][:, 0]
+        else:
+            data = pd.read_csv(self.pos_fasta_path, sep=">chr*",
+                              header=None, engine='python').values[1::2][:, 0][self.index]
+            # change to np.array
+            data = np.array([data])
+
+        if self.subset == "True":
+            size = int(np.floor(data.shape[0] * 0.01))
+            np.random.seed(202101190)
+            index = np.random.choice(data.shape[0], size=size, replace=False)
+            data = data[index]
+
 
         # print(seq)
         # reverse complement
         complement = {'A': 'T', 'T': 'A', 'G': 'C', 'C': 'G', 'N': 'N'}
-        complement_seq = ''
-        for base in seq:
-            complement_seq = complement[base] + complement_seq
+        temp = []
 
-        # print(complement_seq)
+        for seq in data:
+            complement_seq = ''
+            for base in seq:
+                complement_seq = complement[base] + complement_seq
+            temp.append(complement_seq)
 
-        return seq, complement_seq
+        temp = np.array(temp, dtype=object)
 
-    def seq_one_hot_tensor(self, seq):
-        row_index = 0
-        temp = np.zeros((len(seq), 4))
-        for base in seq:
-            if base == 'A':
-                temp[row_index, 0] = 1
-            elif base == 'T':
-                temp[row_index, 1] = 1
-            elif base == 'G':
-                temp[row_index, 2] = 1
-            elif base == 'C':
-                temp[row_index, 3] = 1
-            row_index += 1
+        print("----------------- check the data and reverse complement shape -----------------")
 
-        seq_tensor = torch.tensor(temp).float().permute(1, 0).unsqueeze(0)
+        print(data.shape) #(114538,)
+        print(temp.shape) #(114538,)
+        return data, temp
 
-        return seq_tensor
+    #TODO: update this one for array as input
+    def seq_one_hot_tensor(self, data):
+        temp_list = []
+        for seq in data:
+            temp = np.zeros((len(seq), 4))
+            row_index = 0
+            for base in seq:
+                if base == 'A':
+                    temp[row_index, 0] = 1
+                elif base == 'T':
+                    temp[row_index, 1] = 1
+                elif base == 'G':
+                    temp[row_index, 2] = 1
+                elif base == 'C':
+                    temp[row_index, 3] = 1
+                row_index += 1
+            temp_list.append(temp)
+
+        data_tensor = torch.tensor(temp_list).float().permute(0, 2, 1)
+        print("----------------- check the data tensor shape -----------------")
+        print(data_tensor.shape)
+
+        return data_tensor

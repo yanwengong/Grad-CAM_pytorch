@@ -1,4 +1,4 @@
-import cv2
+#import cv2
 import numpy as np
 import torch
 from cam.activation_and_gradiant import ActivationsAndGradients
@@ -66,13 +66,13 @@ class BaseCAM:
             # CHANGED activations[i, :, :] to activations[i, :]
             cam += w * activations[i, :]
 
-        print("-----------original cam ---------")
+        #print("-----------original cam ---------")
         # relu
         cam = np.maximum(cam, 0)
         # print(cam)
         # print(np.mean(cam))
         # CHANGED input_tensor.shape[2:][::-1] to input_tensor.shape[2]
-        print(input_tensor.shape)
+        # print(input_tensor.shape)
         # cam = cv2.resize(cam, dsize=(input_tensor.shape[2],1))
         # print("-----------resize cam ---------")
         # # print(cam.shape)
